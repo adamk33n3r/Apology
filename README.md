@@ -1,4 +1,4 @@
 Apology
 =======
 
-A Sorry-Like Board Game called Apology!
+A Sorry-Like board game called Apology!
