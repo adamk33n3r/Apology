@@ -9,7 +9,7 @@ public class Tile {
 	java.awt.Color color;
 	Polygon shape;
 	boolean is_corner;
-	enum Properties{
+	public enum Properties{
 		SLIDE_START, SLIDE_MID, SLIDE_END, START, REGULAR, HOME_SHUTE, HOME, START_TILE
 	}
 	public Tile(Properties property, Color color, boolean is_corner){
@@ -92,9 +92,13 @@ public class Tile {
 		int[] yarr = new int[points.size()];
 		Point point = null;
 		int i = 0;
-		for(Iterator<Point> it = points.iterator(); it.hasNext(); point = it.next()){
+		//System.out.println(points);
+		for(Iterator<Point> it = points.iterator(); it.hasNext();){
+			point = it.next();
+			//System.out.println(point);
 			xarr[i] = point.x;
 			yarr[i] = point.y;
+			i++;
 		}
 		shape = new Polygon(xarr,yarr,points.size());
 	}
