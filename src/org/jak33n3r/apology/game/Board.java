@@ -8,4 +8,7 @@ public class Board {
 	public Board() {
 
 	}
+	public ArrayList<Tile> getBoard(){
+		return outer_tiles;
+	}
 }
