@@ -18,15 +18,21 @@ import java.util.Iterator;
 @SuppressWarnings("serial")
 public class GFX extends JComponent {
 	
+	public static int tile_size;
+
 	Dimension size;
-	int tile_size;
 	
 	Board board;
 	
-	public GFX(int x, int y, Board board) {
-		this.board = board;
+	public GFX(int x, int y) {
 		size = new Dimension(x, y);
+		//System.out.println(size.height / 20);
 		tile_size = size.height / 20;
+		//System.out.println(tile_size);
+	}
+	
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 	
 	public static void update() {
@@ -36,38 +42,56 @@ public class GFX extends JComponent {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.WHITE);
-		//g.fillRect(100, 100, 600, 600);
-		for (int i = 0; i < 16; i++) {
-			g.setColor(Color.WHITE);
-			g.fillRect(10, 50 * (i + 1), tile_size, tile_size);
-			g.setColor(Color.BLACK);
-			g.drawRect(10, 50 * (i + 1), tile_size, tile_size);
-		}
 		
 		/*
 		 * Draw board
 		 */
 		Tile tile = null;
-		int x = 150, y = size.height - tile_size;
+		int x = tile_size, y = tile_size;
 		int incx = tile_size, incy = 0;
 		for (Iterator<Tile> it = board.getBoard().iterator(); it.hasNext();) {
 			tile = it.next();
-			g.setColor(Color.BLUE);
+			g.setColor(tile.getColor());
 			g.fillPolygon(getShape(tile.getShape(), x, y));
+			g.setColor(Color.BLACK);
+			g.drawPolygon(getShape(tile.getShape(), x, y));
 			if (tile.isCorner()) {
 				if (incx == tile_size) {
 					incx = 0;
-					incy = -tile_size;
+					incy = tile_size;
 				} else if (incy == -tile_size) {
 					incy = 0;
 					incx = -tile_size;
 				} else if (incx == -tile_size) {
 					incx = 0;
-					incy = tile_size;
+					incy = -tile_size;
 				} else if (incy == tile_size) {
 					incy = 0;
-					incx = tile_size;
+					incx = -tile_size;
+				}
+			}
+			x+=incx;
+			y+=incy;
+		}x=tile_size*4;y=tile_size*3;incx = tile_size; incy = 0;
+		for (Iterator<Tile> it = board.getSlides().iterator(); it.hasNext();) {
+			tile = it.next();
+			g.setColor(tile.getColor());
+			g.fillPolygon(getShape(tile.getShape(), x, y));
+			g.setColor(Color.BLACK);
+			g.drawPolygon(getShape(tile.getShape(), x, y));
+			if (tile.isCorner()) {
+				if (incx == tile_size) {
+					incx = 0;
+					incy = tile_size;
+				} else if (incy == -tile_size) {
+					incy = 0;
+					incx = -tile_size;
+				} else if (incx == -tile_size) {
+					incx = 0;
+					incy = -tile_size;
+				} else if (incy == tile_size) {
+					incy = 0;
+					incx = -tile_size;
 				}
 			}
 			x+=incx;
@@ -76,7 +100,7 @@ public class GFX extends JComponent {
 	}
 	
 	private Polygon getShape(Polygon shape, int x, int y) {
-		shape.translate(x/2,y/2);
+		shape.translate(x,y);
 		return shape;
 	}
 	
@@ -87,19 +111,35 @@ public class GFX extends JComponent {
 	
 	public static void main(String[] args) {
 		
-		Tile[] tiles = {
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, false),
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, true),
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, false),
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, true),
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, false),
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, true),
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, false),
-				new Tile(Tile.Properties.REGULAR, org.jak33n3r.apology.game.Color.NONE, true),
-		};
 		JFrame frame = new JFrame("Apology GFX Test");
-		frame.getContentPane().add(new GFX(1000, 1000, new Board(new ArrayList<Tile>(Arrays.asList(tiles)))));
+		GFX grafix = new GFX(1000, 1000);
+		//GFX grafix = new GFX(500, 500);
+		Tile[] board = new Tile[60];
+		boolean corner = false;
+		for(int i = 0; i < 60; ++i) {
+			if (i == 15 || i == 30 || i == 45 || i == 60)
+				corner = true;
+			board[i] = new Tile(Tile.Properties.REGULAR, Colors.NONE, corner);
+			corner = false;
+		}
+		Tile[] tiles = {
+				new Tile(Tile.Properties.SLIDE_START, Colors.GREEN, false),
+				new Tile(Tile.Properties.SLIDE_MID, Colors.GREEN, false),
+				new Tile(Tile.Properties.SLIDE_END, Colors.GREEN, false),
+				new Tile(Tile.Properties.REGULAR, Colors.NONE, true),
+				new Tile(Tile.Properties.REGULAR, Colors.NONE, false),
+				new Tile(Tile.Properties.REGULAR, Colors.NONE, true),
+				new Tile(Tile.Properties.SLIDE_START, Colors.YELLOW, false),
+				new Tile(Tile.Properties.SLIDE_MID, Colors.YELLOW, false),
+				new Tile(Tile.Properties.SLIDE_END, Colors.YELLOW, false),
+				new Tile(Tile.Properties.REGULAR, Colors.NONE, true),
+				new Tile(Tile.Properties.REGULAR, Colors.NONE, false),
+				new Tile(Tile.Properties.REGULAR, Colors.NONE, true),
+		};
+		grafix.setBoard(new Board(new ArrayList<Tile>(Arrays.asList(board)), new ArrayList<Tile>(Arrays.asList(tiles))));
+		frame.getContentPane().add(grafix);
 		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	
