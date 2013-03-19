@@ -5,5 +5,5 @@ public class Piece {
 		ON_BOARD, IN_SHUTE, IN_START, IN_HOME
 	}
 	int num;
-	Color color;
+	Colors color;
 }
