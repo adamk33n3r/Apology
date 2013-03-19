@@ -1,27 +1,35 @@
 package org.jak33n3r.apology.game;
-import java.awt.Point;
+
+import java.awt.Color;
 import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.Iterator;
+
+import org.jak33n3r.apology.GFX;
 
 public class Tile {
+	
 	Piece occupant;
-	java.awt.Color color;
+	Color color;
 	Polygon shape;
+	
 	boolean is_corner;
-	public enum Properties{
+	
+	public enum Properties {
 		SLIDE_START, SLIDE_MID, SLIDE_END, START, REGULAR, HOME_SHUTE, HOME, START_TILE
 	}
-	public Tile(Properties property, Color color, boolean is_corner){
+	
+	public Tile(Properties property, Colors color, boolean is_corner) {
+		shape = new Polygon();
 		setShape(property);
 		setColor(color);
 		this.is_corner = is_corner;
 	}
-	public java.awt.Color getColor(){
+	
+	public java.awt.Color getColor() {
 		return color;
 	}
-	private void setColor(Color color){
-		switch(color){
+	
+	private void setColor(Colors color) {
+		switch (color) {
 			case BLUE:
 				this.color = java.awt.Color.BLUE;
 				break;
@@ -39,70 +47,61 @@ public class Tile {
 				break;
 		}
 	}
-	public Polygon getShape(){
-		return shape;
+	
+	public Polygon getShape() {
+		//return shape;
+		return new Polygon(shape.xpoints, shape.ypoints, shape.npoints);
 	}
-	private void setShape(Properties property){
-		ArrayList<Point> points = new ArrayList<Point>();
-		switch(property){
+	
+	private void setShape(Properties property) {
+		switch (property) {
 			case SLIDE_START:
-				points.add(new Point(0,3));
-				points.add(new Point(0,7));
-				points.add(new Point(5,7));
-				points.add(new Point(9,10));
-				points.add(new Point(9,0));
-				points.add(new Point(5,3));
+				shape.addPoint(0, GFX.tile_size / 4);
+				shape.addPoint(0, GFX.tile_size / 4 * 3);
+				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 4 * 3);
+				shape.addPoint(GFX.tile_size / 20 * 19, GFX.tile_size);
+				shape.addPoint(GFX.tile_size / 20 * 19, 0);
+				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 4);
 				break;
 			case SLIDE_MID:
-				points.add(new Point(0,3));
-				points.add(new Point(10,3));
-				points.add(new Point(0,7));
-				points.add(new Point(10,7));
+				shape.addPoint(0, GFX.tile_size / 4);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 4);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 4 * 3);
+				shape.addPoint(0, GFX.tile_size / 4 * 3);
 				break;
 			case SLIDE_END:
-				points.add(new Point(3,3));
-				points.add(new Point(3,7));
-				points.add(new Point(10,7));
-				points.add(new Point(10,3));
+				shape.addPoint(GFX.tile_size / 4, GFX.tile_size / 4);
+				shape.addPoint(GFX.tile_size / 4, GFX.tile_size / 4 * 3);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 4 * 3);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 4);
 				break;
 			case START:
 				break;
 			case REGULAR:
-				points.add(new Point(0,0));
-				points.add(new Point(0,10));
-				points.add(new Point(10,10));
-				points.add(new Point(10,0));
+				shape.addPoint(0, 0);
+				shape.addPoint(0, GFX.tile_size);
+				shape.addPoint(GFX.tile_size, GFX.tile_size);
+				shape.addPoint(GFX.tile_size, 0);
 				break;
 			case HOME_SHUTE:
-				points.add(new Point(0,0));
-				points.add(new Point(0,10));
-				points.add(new Point(10,10));
-				points.add(new Point(10,0));
+				shape.addPoint(0, 0);
+				shape.addPoint(0, 10);
+				shape.addPoint(10, 10);
+				shape.addPoint(10, 0);
 				break;
 			case HOME:
 				break;
 			case START_TILE:
-				points.add(new Point(3,3));
-				points.add(new Point(3,7));
-				points.add(new Point(10,7));
-				points.add(new Point(10,3));
+				shape.addPoint(3, 3);
+				shape.addPoint(3, 7);
+				shape.addPoint(10, 7);
+				shape.addPoint(10, 3);
 				break;
 		}
-		int[] xarr = new int[points.size()];
-		int[] yarr = new int[points.size()];
-		Point point = null;
-		int i = 0;
-		//System.out.println(points);
-		for(Iterator<Point> it = points.iterator(); it.hasNext();){
-			point = it.next();
-			//System.out.println(point);
-			xarr[i] = point.x;
-			yarr[i] = point.y;
-			i++;
-		}
-		shape = new Polygon(xarr,yarr,points.size());
 	}
-	public boolean isCorner(){
+	
+	public boolean isCorner() {
 		return is_corner;
 	}
+	
 }
