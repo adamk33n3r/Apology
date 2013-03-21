@@ -2,6 +2,9 @@ package org.jak33n3r.apology.game;
 
 import java.awt.Color;
 import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.Path2D.Float;
 
 import org.jak33n3r.apology.GFX;
 
@@ -9,17 +12,34 @@ public class Tile {
 	
 	Piece occupant;
 	Color color;
-	Polygon shape;
+	Path2D.Float shape;
 	
 	boolean is_corner;
 	
-	public enum Properties {
+	public enum Type {
 		SLIDE_START, SLIDE_MID, SLIDE_END, START, REGULAR, HOME_SHUTE, HOME, START_TILE
 	}
 	
-	public Tile(Properties property, Colors color, boolean is_corner) {
-		shape = new Polygon();
-		setShape(property);
+	public enum Orientation {
+		NORTH(1), SOUTH(3), EAST(2), WEST(0), NONE(0);
+		public final int id;
+		
+		Orientation(int id) {
+			this.id = id;
+		}
+		
+	}
+	
+	public Tile(Type type, Orientation orient, Colors color, boolean is_corner) {
+		Polygon shape = new Polygon();
+		setShape(shape, type);
+		this.shape = new Path2D.Float(shape);
+		System.out.println("Creating shape: " + orient + " with Orientation: " + orient + " with id: " + orient.id);
+		if (orient.id != 0) {
+			AffineTransform trans = new AffineTransform();
+			trans.rotate(Math.PI / 2.0 * orient.id, GFX.tile_size / 2, GFX.tile_size / 2);
+			this.shape.transform(trans);
+		}
 		setColor(color);
 		this.is_corner = is_corner;
 	}
@@ -48,12 +68,16 @@ public class Tile {
 		}
 	}
 	
-	public Polygon getShape() {
+	/*public Polygon getShape() {
 		//return shape;
 		return new Polygon(shape.xpoints, shape.ypoints, shape.npoints);
+	}*/
+	
+	public Path2D.Float getShape() {
+		return new Path2D.Float(this.shape);
 	}
 	
-	private void setShape(Properties property) {
+	private void setShape(Polygon shape, Type property) {
 		switch (property) {
 			case SLIDE_START:
 				shape.addPoint(0, GFX.tile_size / 4);
