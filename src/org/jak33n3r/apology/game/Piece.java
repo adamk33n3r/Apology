@@ -6,4 +6,12 @@ public class Piece {
 	}
 	int num;
 	Colors color;
+	State state;
+	
+	public Piece(int num, Colors color) {
+		this.num = num;
+		this.color = color;
+		this.state = State.IN_START;
+	}
+	
 }
