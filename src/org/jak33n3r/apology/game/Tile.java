@@ -34,7 +34,7 @@ public class Tile {
 		Polygon shape = new Polygon();
 		setShape(shape, type);
 		this.shape = new Path2D.Float(shape);
-		System.out.println("Creating shape: " + orient + " with Orientation: " + orient + " with id: " + orient.id);
+		System.out.println("Creating tile: " + type + " with Orientation: " + orient + " with id: " + orient.id);
 		if (orient.id != 0) {
 			AffineTransform trans = new AffineTransform();
 			trans.rotate(Math.PI / 2.0 * orient.id, GFX.tile_size / 2, GFX.tile_size / 2);
@@ -68,11 +68,6 @@ public class Tile {
 		}
 	}
 	
-	/*public Polygon getShape() {
-		//return shape;
-		return new Polygon(shape.xpoints, shape.ypoints, shape.npoints);
-	}*/
-	
 	public Path2D.Float getShape() {
 		return new Path2D.Float(this.shape);
 	}
@@ -80,24 +75,24 @@ public class Tile {
 	private void setShape(Polygon shape, Type property) {
 		switch (property) {
 			case SLIDE_START:
-				shape.addPoint(0, GFX.tile_size / 4);
-				shape.addPoint(0, GFX.tile_size / 4 * 3);
-				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 4 * 3);
-				shape.addPoint(GFX.tile_size / 20 * 19, GFX.tile_size);
-				shape.addPoint(GFX.tile_size / 20 * 19, 0);
-				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 4);
+				shape.addPoint(0, GFX.tile_size / 10 * 7);
+				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 10 * 7);
+				shape.addPoint(GFX.tile_size / 20 * 15, GFX.tile_size / 20 * 17);
+				shape.addPoint(GFX.tile_size / 20 * 15, GFX.tile_size / 20 * 2);
+				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 10 * 3);
+				shape.addPoint(0, GFX.tile_size / 10 * 3);
 				break;
 			case SLIDE_MID:
-				shape.addPoint(0, GFX.tile_size / 4);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 4);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 4 * 3);
-				shape.addPoint(0, GFX.tile_size / 4 * 3);
+				shape.addPoint(0, GFX.tile_size / 10 * 7);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 7);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 3);
+				shape.addPoint(0, GFX.tile_size / 10 * 3);
 				break;
 			case SLIDE_END:
-				shape.addPoint(GFX.tile_size / 4, GFX.tile_size / 4);
-				shape.addPoint(GFX.tile_size / 4, GFX.tile_size / 4 * 3);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 4 * 3);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 4);
+				shape.addPoint(GFX.tile_size / 10 * 3, GFX.tile_size / 10 * 3);
+				shape.addPoint(GFX.tile_size / 10 * 3, GFX.tile_size / 10 * 7);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 7);
+				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 3);
 				break;
 			case START:
 				break;

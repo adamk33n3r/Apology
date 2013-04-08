@@ -4,14 +4,14 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.jak33n3r.apology.game.*;
-import org.jak33n3r.apology.game.Tile.Type;
-
-import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.Iterator;
 public class GFX extends JComponent {
 	
 	public static int tile_size;
-
+	
 	Dimension size;
 	
 	Board board;
@@ -30,7 +30,7 @@ public class GFX extends JComponent {
 	public GFX(int x, int y) {
 		size = new Dimension(x, y);
 		//System.out.println(size.height / 20);
-		tile_size = size.height / 20;
+		tile_size = size.height / 10;
 		//System.out.println(tile_size);
 	}
 	
@@ -47,14 +47,33 @@ public class GFX extends JComponent {
 		super.paintComponent(gfx);
 		
 		Graphics2D g = (Graphics2D) gfx.create();
+		g.scale(.5, .5);
+
+		/*
+		 * Draw logo
+		 */
+		Font font = new Font("Arial Rounded MT Bold", Font.BOLD, 100);
+		TextLayout layout = new TextLayout("Apology!", font, g.getFontRenderContext());
+		AffineTransform transform = new AffineTransform();
+	    Shape outline = layout.getOutline(null);
+	    transform.translate(this.getWidth() - (outline.getBounds().width / 2), this.getHeight() - (outline.getBounds().height / 2));
+	    Path2D outlinePath = new Path2D.Float(outline);
+	    outlinePath.transform(transform);
+	    g.setColor(Color.WHITE);
+	    g.fill(outlinePath);
+	    g.setColor(Color.BLACK);
+	    g.draw(outlinePath);
+	    
+	    
+		//g.drawString("Apology!", (this.getWidth() - g.getFontMetrics().stringWidth("Apology!")) / 2, (this.getHeight() - g.getFontMetrics().getHeight()) / 2);
 		
 		/*
-		 * Draw board
+		 * Draw tiles
 		 */
 		Tile tile = null;
-		int x = tile_size, y = tile_size;
+		int x = this.getWidth() - (tile_size * 8), y = this.getHeight() - (tile_size * 8);
 		int incx = tile_size, incy = 0;
-		/*for (Iterator<Tile> it = board.getBoard().iterator(); it.hasNext();) {
+		for (Iterator<Tile> it = board.getBoard().iterator(); it.hasNext();) {
 			tile = it.next();
 			g.setColor(tile.getColor());
 			g.fill(getShape(tile.getShape(), x, y));
@@ -75,32 +94,38 @@ public class GFX extends JComponent {
 					incx = -tile_size;
 				}
 			}
-			x+=incx;
-			y+=incy;
-		}*/x=tile_size*4;y=tile_size*3;incx = tile_size; incy = 0;
+			x += incx;
+			y += incy;
+		}
+		x = this.getWidth()- (tile_size * 8);
+		y = this.getHeight() - (tile_size * 8);
+		incx = tile_size;
+		incy = 0;
 		for (Iterator<Tile> it = board.getSlides().iterator(); it.hasNext();) {
 			tile = it.next();
-			g.setColor(tile.getColor());
-			g.fill(getShape(tile.getShape(), x, y));
-			g.setColor(Color.BLACK);
-			g.draw(getShape(tile.getShape(), x, y));
-			if (tile.isCorner()) {
-				if (incx == tile_size) {
-					incx = 0;
-					incy = tile_size;
-				} else if (incy == -tile_size) {
-					incy = 0;
-					incx = -tile_size;
-				} else if (incx == -tile_size) {
-					incx = 0;
-					incy = -tile_size;
-				} else if (incy == tile_size) {
-					incy = 0;
-					incx = -tile_size;
+			if (tile != null) {
+				g.setColor(tile.getColor());
+				g.fill(getShape(tile.getShape(), x, y));
+				g.setColor(Color.BLACK);
+				g.draw(getShape(tile.getShape(), x, y));
+				if (tile.isCorner()) {
+					if (incx == tile_size) {
+						incx = 0;
+						incy = tile_size;
+					} else if (incy == -tile_size) {
+						incy = 0;
+						incx = -tile_size;
+					} else if (incx == -tile_size) {
+						incx = 0;
+						incy = -tile_size;
+					} else if (incy == tile_size) {
+						incy = 0;
+						incx = -tile_size;
+					}
 				}
 			}
-			x+=incx;
-			y+=incy;
+			x += incx;
+			y += incy;
 		}
 	}
 	
@@ -119,32 +144,67 @@ public class GFX extends JComponent {
 	public static void main(String[] args) {
 		
 		JFrame frame = new JFrame("Apology GFX Test");
-		//GFX grafix = new GFX(1000, 1000);
-		GFX grafix = new GFX(500, 500);
+		GFX grafix = new GFX(1000, 1000);
+		//GFX grafix = new GFX(500, 500);
 		Tile[] board = new Tile[60];
 		boolean corner = false;
-		for(int i = 0; i < 60; ++i) {
+		for (int i = 0; i < 60; ++i) {
 			if (i == 15 || i == 30 || i == 45 || i == 60)
 				corner = true;
 			board[i] = new Tile(Tile.Type.REGULAR, Tile.Orientation.NONE, Colors.NONE, corner);
 			corner = false;
 		}
 		Tile[] tiles = {
-				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.EAST, Colors.GREEN, false),
-				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.EAST, Colors.GREEN, false),
-				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.EAST, Colors.GREEN, false),
+				null,
+				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.EAST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.EAST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.EAST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.EAST, Colors.YELLOW, false),
+				null, null, null, null,
+				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.EAST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.EAST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.EAST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.EAST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.EAST, Colors.YELLOW, false),
+				null,
 				new Tile(Tile.Type.REGULAR, Tile.Orientation.NONE, Colors.NONE, true),
-				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.SOUTH, Colors.RED, false),
-				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.SOUTH, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				null, null, null, null,
+				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.SOUTH, Colors.GREEN, false),
+				null,
 				new Tile(Tile.Type.REGULAR, Tile.Orientation.NONE, Colors.NONE, true),
-				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.WEST, Colors.YELLOW, false),
-				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.WEST, Colors.YELLOW, false),
-				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.WEST, Colors.YELLOW, false),
+				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.WEST, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.WEST, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.WEST, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.WEST, Colors.RED, false),
+				null, null, null, null,
+				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.WEST, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.WEST, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.WEST, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.WEST, Colors.RED, false),
+				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.WEST, Colors.RED, false),
+				null,
 				new Tile(Tile.Type.REGULAR, Tile.Orientation.NONE, Colors.NONE, true),
 				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.NORTH, Colors.BLUE, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.NORTH, Colors.BLUE, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.NORTH, Colors.BLUE, false),
 				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.NORTH, Colors.BLUE, false),
+				null, null, null, null,
+				new Tile(Tile.Type.SLIDE_START, Tile.Orientation.NORTH, Colors.BLUE, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.NORTH, Colors.BLUE, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.NORTH, Colors.BLUE, false),
+				new Tile(Tile.Type.SLIDE_MID, Tile.Orientation.NORTH, Colors.BLUE, false),
+				new Tile(Tile.Type.SLIDE_END, Tile.Orientation.NORTH, Colors.BLUE, false),
+				null,
 				new Tile(Tile.Type.REGULAR, Tile.Orientation.NONE, Colors.NONE, true),
-		};
+				};
 		grafix.setBoard(new Board(new ArrayList<Tile>(Arrays.asList(board)), new ArrayList<Tile>(Arrays.asList(tiles))));
 		frame.getContentPane().add(grafix);
 		frame.pack();
