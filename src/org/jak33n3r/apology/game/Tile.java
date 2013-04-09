@@ -3,7 +3,6 @@ package org.jak33n3r.apology.game;
 import java.awt.Color;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
 import java.awt.geom.Path2D.Float;
 
 import org.jak33n3r.apology.GFX;
@@ -12,7 +11,7 @@ public class Tile {
 	
 	Piece occupant;
 	Color color;
-	Path2D.Float shape;
+	Float shape;
 	
 	boolean is_corner;
 	
@@ -33,7 +32,7 @@ public class Tile {
 	public Tile(Type type, Orientation orient, Colors color, boolean is_corner) {
 		Polygon shape = new Polygon();
 		setShape(shape, type);
-		this.shape = new Path2D.Float(shape);
+		this.shape = new Float(shape);
 		System.out.println("Creating tile: " + type + " with Orientation: " + orient + " with id: " + orient.id);
 		if (orient.id != 0) {
 			AffineTransform trans = new AffineTransform();
@@ -68,53 +67,57 @@ public class Tile {
 		}
 	}
 	
-	public Path2D.Float getShape() {
-		return new Path2D.Float(this.shape);
+	public Float getShape() {
+		return new Float(this.shape);
+	}
+	
+	private void addPoint(Polygon shape, float x, float y) {
+		shape.addPoint((int) x, (int) y);
 	}
 	
 	private void setShape(Polygon shape, Type property) {
 		switch (property) {
 			case SLIDE_START:
-				shape.addPoint(0, GFX.tile_size / 10 * 7);
-				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 10 * 7);
-				shape.addPoint(GFX.tile_size / 20 * 15, GFX.tile_size / 20 * 17);
-				shape.addPoint(GFX.tile_size / 20 * 15, GFX.tile_size / 20 * 2);
-				shape.addPoint(GFX.tile_size / 2, GFX.tile_size / 10 * 3);
-				shape.addPoint(0, GFX.tile_size / 10 * 3);
+				addPoint(shape,0, GFX.tile_size / 10 * 7);
+				addPoint(shape,GFX.tile_size / 2, GFX.tile_size / 10 * 7);
+				addPoint(shape,GFX.tile_size / 20 * 15, GFX.tile_size / 20 * 17);
+				addPoint(shape,GFX.tile_size / 20 * 15, GFX.tile_size / 20 * 2);
+				addPoint(shape,GFX.tile_size / 2, GFX.tile_size / 10 * 3);
+				addPoint(shape,0, GFX.tile_size / 10 * 3);
 				break;
 			case SLIDE_MID:
-				shape.addPoint(0, GFX.tile_size / 10 * 7);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 7);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 3);
-				shape.addPoint(0, GFX.tile_size / 10 * 3);
+				addPoint(shape,0, GFX.tile_size / 10 * 7);
+				addPoint(shape,GFX.tile_size, GFX.tile_size / 10 * 7);
+				addPoint(shape,GFX.tile_size, GFX.tile_size / 10 * 3);
+				addPoint(shape,0, GFX.tile_size / 10 * 3);
 				break;
 			case SLIDE_END:
-				shape.addPoint(GFX.tile_size / 10 * 3, GFX.tile_size / 10 * 3);
-				shape.addPoint(GFX.tile_size / 10 * 3, GFX.tile_size / 10 * 7);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 7);
-				shape.addPoint(GFX.tile_size, GFX.tile_size / 10 * 3);
+				addPoint(shape,GFX.tile_size / 10 * 3, GFX.tile_size / 10 * 3);
+				addPoint(shape,GFX.tile_size / 10 * 3, GFX.tile_size / 10 * 7);
+				addPoint(shape,GFX.tile_size, GFX.tile_size / 10 * 7);
+				addPoint(shape,GFX.tile_size, GFX.tile_size / 10 * 3);
 				break;
 			case START:
 				break;
 			case REGULAR:
-				shape.addPoint(0, 0);
-				shape.addPoint(0, GFX.tile_size);
-				shape.addPoint(GFX.tile_size, GFX.tile_size);
-				shape.addPoint(GFX.tile_size, 0);
+				addPoint(shape,0, 0);
+				addPoint(shape,0, GFX.tile_size);
+				addPoint(shape,GFX.tile_size, GFX.tile_size);
+				addPoint(shape,GFX.tile_size, 0);
 				break;
 			case HOME_SHUTE:
-				shape.addPoint(0, 0);
-				shape.addPoint(0, 10);
-				shape.addPoint(10, 10);
-				shape.addPoint(10, 0);
+				addPoint(shape, 0, 0);
+				addPoint(shape, 0, 10);
+				addPoint(shape, 10, 10);
+				addPoint(shape, 10, 0);
 				break;
 			case HOME:
 				break;
 			case START_TILE:
-				shape.addPoint(3, 3);
-				shape.addPoint(3, 7);
-				shape.addPoint(10, 7);
-				shape.addPoint(10, 3);
+				addPoint(shape, 3, 3);
+				addPoint(shape, 3, 7);
+				addPoint(shape, 10, 7);
+				addPoint(shape, 10, 3);
 				break;
 		}
 	}
