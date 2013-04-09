@@ -56,7 +56,7 @@ public class Apology {
 	}
 	
 	public void start() {
-		this.grafix.addPlayers(new Player(Colors.GREEN));
+		this.grafix.addPlayers(new Player(Colors.GREEN), new Player(Colors.RED), new Player(Colors.BLUE), new Player(Colors.YELLOW));
 		this.grafix.frame = new JFrame("Apology GFX Test");
 		this.grafix.frame.getContentPane().add(this.grafix);
 		this.grafix.frame.pack();
@@ -70,7 +70,7 @@ public class Apology {
 		
 		rand = new Random();
 		
-		this.grafix = new GFX(1000, 1000);
+		this.grafix = new GFX(800, 800);
 		Tile[] board = new Tile[60];
 		boolean corner = false;
 		for (int i = 0; i < 60; ++i) {

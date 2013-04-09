@@ -12,7 +12,7 @@ public class Player implements Renderable {
 	public Player(Colors color) {
 		this.color = color;
 		for (int i = 0; i < 4; i++)
-			this.pieces[i] = new Piece(i, color, Apology.getGame().getBoard().getTiles().get(0));
+			this.pieces[i] = new Piece(i, color, Apology.getGame().getBoard().getTiles().get(this.color.ordinal()));
 	}
 
 	@Override

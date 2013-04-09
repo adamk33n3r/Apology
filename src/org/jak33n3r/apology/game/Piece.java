@@ -39,7 +39,6 @@ public class Piece implements Renderable {
 				tile.loc.y + (int) GFX.tile_size, tile.loc.y + (int) GFX.tile_size }, 3);
 		int x = Apology.randInt(50);
 		int y = Apology.randInt(50);
-		System.out.println(x + " " + y);
 		p.translate(x - 25, y - 25);
 		g.fill(p);
 		g.setColor(Color.BLACK);

@@ -46,7 +46,6 @@ public class GFX extends JComponent {
 	
 	@Override
 	public void paintComponent(Graphics gfx) {
-		System.out.println("Called");
 		if (!this.isVisible())
 			return;
 		super.paintComponent(gfx);
