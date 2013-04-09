@@ -1,6 +1,7 @@
 package org.jak33n3r.apology.game;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D.Float;
@@ -12,6 +13,7 @@ public class Tile {
 	Piece occupant;
 	Color color;
 	Float shape;
+	Point loc;
 	
 	boolean is_corner;
 	
@@ -33,7 +35,8 @@ public class Tile {
 		Polygon shape = new Polygon();
 		setShape(shape, type);
 		this.shape = new Float(shape);
-		System.out.println("Creating tile: " + type + " with Orientation: " + orient + " with id: " + orient.id);
+		if (GFX.debug)
+			System.out.println("Creating tile: " + type + " with Orientation: " + orient + " with id: " + orient.id);
 		if (orient.id != 0) {
 			AffineTransform trans = new AffineTransform();
 			trans.rotate(Math.PI / 2.0 * orient.id, GFX.tile_size / 2, GFX.tile_size / 2);
@@ -47,22 +50,26 @@ public class Tile {
 		return color;
 	}
 	
+	public void setLocation(Point point) {
+		this.loc = point;
+	}
+	
 	private void setColor(Colors color) {
 		switch (color) {
 			case BLUE:
-				this.color = java.awt.Color.BLUE;
+				this.color = Color.BLUE;
 				break;
 			case YELLOW:
-				this.color = java.awt.Color.YELLOW;
+				this.color = Color.YELLOW;
 				break;
 			case GREEN:
-				this.color = java.awt.Color.GREEN;
+				this.color = Color.GREEN;
 				break;
 			case RED:
-				this.color = java.awt.Color.RED;
+				this.color = Color.RED;
 				break;
 			case NONE:
-				this.color = java.awt.Color.WHITE;
+				this.color = Color.WHITE;
 				break;
 		}
 	}

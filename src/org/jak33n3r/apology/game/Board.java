@@ -10,7 +10,7 @@ public class Board {
 		outer_tiles = board;
 		slide_tiles = tiles;
 	}
-	public ArrayList<Tile> getBoard(){
+	public ArrayList<Tile> getTiles(){
 		return outer_tiles;
 	}
 	
