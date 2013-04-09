@@ -63,10 +63,7 @@ public class GFX extends JComponent {
 	    g.fill(outlinePath);
 	    g.setColor(Color.BLACK);
 	    g.draw(outlinePath);
-	    
-	    
-		//g.drawString("Apology!", (this.getWidth() - g.getFontMetrics().stringWidth("Apology!")) / 2, (this.getHeight() - g.getFontMetrics().getHeight()) / 2);
-		
+	    		
 		/*
 		 * Draw tiles
 		 */
