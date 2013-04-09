@@ -16,7 +16,11 @@ public class Apology {
 		System.out.println("Welcome to Apology!");
 		Deck deck = new Deck();
 		for(int i = 0; i < 45; ++i){
-			System.out.println(deck.getDeckOfCards()[i]);
+			System.out.println(deck.getDeckOfCards()[i].getValue());
+			System.out.println(deck.getDeckOfCards()[i].getCardType());
+			deck.shuffle();
+			System.out.println(deck.getDeckOfCards()[i].getValue());
+			System.out.println(deck.getDeckOfCards()[i].getCardType());
 		}
 	}
 

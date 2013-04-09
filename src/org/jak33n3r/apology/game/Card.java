@@ -3,14 +3,15 @@ package org.jak33n3r.apology.game;
 public class Card {
 	int value;
 	CardType card_type;
-	CardType card_type2;
-	CardType card_type3;
+	
+	public Card(int val, CardType type){
+		this.value = val;
+		this.card_type = type;
+	}
 	
 	public Card(){
-		value = 0;
-		card_type = CardType.NONE;
-		card_type2 = CardType.NONE;
-		card_type3 = CardType.NONE;
+		this.value = 0;
+		this.card_type = CardType.NONE;
 	}
 	
 	public int getValue(){
@@ -21,14 +22,6 @@ public class Card {
 		return card_type;
 	}
 	
-	public CardType getCardType2(){
-		return card_type2;
-	}
-	
-	public CardType getCardType3(){
-		return card_type3;
-	}
-	
 	public void setValue(int val){
 		this.value = val;
 	}
@@ -37,15 +30,8 @@ public class Card {
 		this.card_type = type;
 	}
 	
-	public void setCardType2(CardType type){
-		this.card_type2 = type;
-	}
-	
-	public void setCardType3(CardType type){
-		this.card_type3 = type;
-	}
-	
 	public enum CardType{
-		START, FORWARD, BACKWARD, SWAP, SPLIT, SORRY, DRAW_TWICE, NONE
+		START, FORWARD, BACKWARD, SWAP, SPLIT, SORRY, NONE, FORWARD_START,
+		FORWARD_START_DRAW_TWICE, FORWARD_BACKWARD, FORWARD_SWAP, FORWARD_SPLIT
 	}
 }
